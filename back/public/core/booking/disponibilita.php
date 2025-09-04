@@ -1,6 +1,9 @@
 <?php
 
 function getDisp($dateA, $dateD, $adulti, $bambini, $db) {
+    if (!$dateA || !$dateD || $adulti === null || $bambini === null) {
+            return "Errore: Valori mancanti";
+    }
     try{
         $dateAObj = DateTime::createFromFormat('Y-m-d', $dateA);
         $dateDObj = DateTime::createFromFormat('Y-m-d', $dateD);

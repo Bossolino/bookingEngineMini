@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
   if (to.path !== "/" && to.path !== "/PageNotFound" && to.fullPath === `/prenotazione/${roomSelected.value}` && to.path !== "/riepilogo") {
     return next("/PageNotFound");
   }
-  console.log(`Reindirizzamento da ${from.fullPath} a ${to.fullPath}`);
+  // console.log(`Reindirizzamento da ${from.fullPath} a ${to.fullPath}`);
   return next();
 });
 
@@ -78,8 +78,8 @@ export default {
     return `${y}-${m}-${d}`
   },
   cercaCamere: function () {
-    console.log(this.stringData(dataArrivo.value))
-    console.log(this.stringData(dataPartenza.value))
+    // console.log(this.stringData(dataArrivo.value))
+    // console.log(this.stringData(dataPartenza.value))
     carica.value = true;
     camereDisp.value = [];
     axios({
@@ -93,12 +93,17 @@ export default {
         bambini: bambini.value
       }
     }).then(camere => {
+      if (camere.data.length === 0) {
+        nessCameraDisp.value = true;
+        carica.value = false;
+        return;
+      }
       camereDisp.value = camere.data
       carica.value = false;
       nessCameraDisp.value = false;
-      console.log(camere.data)
-      console.log(this.stringData(dataArrivo.value))
-      console.log(this.stringData(dataPartenza.value))
+      // console.log(camere.data)
+      // console.log(this.stringData(dataArrivo.value))
+      // console.log(this.stringData(dataPartenza.value))
     }).catch(error => {
       console.log(error);
       carica.value = false;
@@ -122,6 +127,7 @@ export default {
     }).catch(error=>{
       errPren.value = true;
       textPren.value = error.data;
+      router.replace("/PageNotFound");
       console.error(error)
     })
   },

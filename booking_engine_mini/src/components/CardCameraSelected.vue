@@ -2,19 +2,25 @@
 import main from '@/main'
 import { watch, ref } from 'vue';
 
-const err = ref(false)
+const err = ref(true)
 
 if (main.roomSelected.value === 0) {
     main.router.replace("/");
 }
 
-watch(main.errPren, (newVal) => {
-    if (!newVal) {
-      main.router.replace("/riepilogo");
+// watch(main.errPren, (newVal) => {
+//     if (!newVal) {
+//       main.router.replace("/riepilogo");
+//     }
+//   });
+
+watch([main.nomeOspite, main.emailOspite], () => {
+    if (main.nomeOspite.value !== "" && main.emailOspite.value !== "") {
+        err.value = false;
+    } else {
+        err.value = true;
     }
-  });
-
-
+});
 
 main.prezzoTotale.value = main.giorniTotali.value * main.roomSelectedPrice.value;
 
@@ -40,7 +46,7 @@ main.prezzoTotale.value = main.giorniTotali.value * main.roomSelectedPrice.value
                 <v-card-text><v-icon icon="mdi-cash"></v-icon> Prezzo per notte: {{ main.roomSelectedPrice.value }}€ </v-card-text>
                 <v-card-text>
                     Giorni totali: {{ main.giorniTotali.value }}
-                    Prezzo camera: {{ main.roomSelectedPrice.value }} x {{ main.giorniTotali.value }} = {{ main.prezzoTotale.value }};
+                    Prezzo camera: {{ main.roomSelectedPrice.value }} x {{ main.giorniTotali.value }} = {{ main.prezzoTotale.value }}€;
                 </v-card-text>
                 <v-card-actions>
                     <v-row>
@@ -49,7 +55,7 @@ main.prezzoTotale.value = main.giorniTotali.value * main.roomSelectedPrice.value
                                 <v-col cols="20">
                                     <v-row>
                                         <v-col><v-text-field required v-model="main.nomeOspite.value" label="Inserisci il nome"></v-text-field>
-                                            <sub>Inserire il nome completo.<br>Per il checkin è richiesto un documento.<br>Il nome deve combaciare con quello scritto nel documento.</sub>
+                                            <sub style="color: red;">*Inserire il nome completo.<br>*Per il checkin è richiesto un documento.<br>*Il nome deve combaciare con il nome scritto nel documento.</sub>
                                         </v-col>
                                     </v-row>
                                     <v-row>
